@@ -1,62 +1,68 @@
 # Traffic Simulation
-## Demo 
 
-![traffic-sim](https://user-images.githubusercontent.com/57450093/205176542-f5ffbf1e-580c-425a-be06-1e8a5cecccdc.gif)
+## Introduction
 
+This project involves the development of a vehicular traffic simulation in an urban environment. The simulation generates autonomous vehicles that strive to reach their destinations while avoiding traffic congestion. The objective of the project is to apply multi-agent system concepts to create an efficient and intelligent traffic system.
 
-## How it Works? 
+## Technologies
 
+### Python
 
-This is a system that simulates traffic in a city. To achieve this, various agents were used in our simulation 
-(cars, buildings, streets, arrival points and traffic lights), each with their respective rules so that the simulation resembles reality as much as possible.
+The agents' processing and logic are constructed through a Python API that is tasked with managing the current state of each agent at every step of the model. The API generates a new state for each agent, utilizing the specialized Mesa library, tailored specifically for multi-agent models.
 
-For example, cars must not collide, they must respect the color of traffic lights, they can change lanes and they must avoid obstacles. On the other hand, the traffic lights must be synchronized to avoid collisions and must be able to change color after a certain defined time.
+### Unity
 
+The simulation graphics were created using Unity, with the application requesting updated agent states from the API at predetermined intervals and rendering them in real-time.
 
-In our solution, we decided to use the a* algorithm, which aims to find the shortest path from point a to point b. We decided to use this algorithm since, unlike others like Djikstra, it allows cars to take into account obstacles on the road, as well as the direction a vehicle should follow on the street. Thanks to this, cars never drive in the wrong direction and will also be able to find the most efficient route to their destination.
+## How It Works
 
+The simulation features various agents that interact with each other to create the traffic flow.
 
-But what if the shortest route to the destination is very congested?
-Thanks to our implementation, when a car detects that there are 5 cars in front of it that are not moving, it means that there is too much traffic on the current route, therefore it recalculates its route again using the previous algorithm, but taking into account the vehicles in front as obstacles. Thanks to this intelligent decision making, more vehicles can exist in the simulation at the same time without the simulation being congested.
+### Cars
 
-## Instalation Manual
+Cars are the main agents in the simulation. They are generated at random intervals of time in the corners of the map and assigned a random destination. Each vehicle calculates the shortest path to its destination using the A\* (A star) search algorithm.
 
-#### Miniconda
+At each step of the model, each vehicle must analyze the following elements in its environment:
 
-Enter the following link, and install the 3.8 version for your OS: https://docs.conda.io/en/latest/miniconda.html
+- If there is a vehicle in the next cell of the route, the vehicle must wait for it to move.
+- If there are blockages or congestion on the current route, the vehicle will redirect by recalculating the next nearest route to the destination.
+- If the vehicle is facing a red traffic light, it must wait until the light turns green.
+- The vehicle must move in the direction indicated by the street (not against the flow of traffic).
 
-#### Repository
+### Traffic Lights
 
-Press the code button and copy the htttps link
+The traffic lights change colors at fixed intervals of time, controlling the flow of vehicles to avoid collisions.
 
-- Enter a terminal and clone the repository with the following command:
+### Roads
 
-- git clone https://github.com/DiegoAraque21/Traffic-Simulation.git
-#### Packages
+Each cell of the road has a specific direction that must be respected by the vehicles, and they cannot travel against the flow of traffic.
 
-To run this project you will need miniconda or anaconda, and we are using version 3.8 of python. Also, to run the simulation on unity it's necessary to have version 2021.3.12f1 installed.
+## Installation
 
-For everything to work accordingly, and if you met the requirements above you will need to follow this steps:
+### Miniconda
 
-- Create a virtual environment: conda create --name traffic-sim python=3.8
-- After creating your environment, activated from the terminal: conda activate traffic-sim
-- At the moment we have the virtual environment, we just need to intall flask and mesa now
-- Flask: pip install flask
-- Mesa: pip install mesa
+Install the 3.8 version for your OS from the following link: https://docs.conda.io/en/latest/miniconda.html
 
-After installing everything you are ready to run the simulation
+### Clone Repository
 
-#### Run the simulation
+Press the code button and copy the https link. Clone the repository from the terminal with the following command:
 
-If you are in the parent folder, redirect yourself to the folder 2D_SImulation with the following command: cd 2D_SImulation
+`git clone https://github.com/marcotorresx/traffic-flow.git`
 
-When you are in this new folder just run python server.py to run the server flask for it to work in unity. Or run server_2D.py, to run the simulation on html and in 2D.
+### Packages
 
-If you decided to run the flask server, you will need to open the unity project and play the scene called BuildCity.
+To run this project, you need miniconda or anaconda and version 3.8 of Python. To run the simulation in Unity, you must have version 2021.3.12f1 installed.
 
+Once you install miniconda and Unity, follow these steps:
 
-## Contributors
+- Create a virtual environment: `conda create --name traffic-sim python=3.8`
+- Activate the virtual environment from the terminal: `conda activate traffic-sim`
+- Install Flask and Mesa: `pip install flask` and `pip install mesa`
 
-- [@Fernando Valdeon](https://github.com/lfvm)
-- [@Marco Torres](https://github.com/marcotorresx)
-- [@Diego Araque](https://github.com/DiegoAraque21)
+After installing everything, you are ready to run the simulation.
+
+## Running the Simulation
+
+Navigate to the server folder by entering the following command: `cd server`
+
+Once you are in this folder, run `python server.py` to start the Flask API. Open the Unity project and play the BuildCity scene to run the simulation.
